@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="bcjobs_analyticsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="JobCategories">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="SubCategoryId" />
+          </Key>
+          <Property Name="JobId" Type="int" Nullable="false" />
+          <Property Name="SubCategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Jobs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReferenceId" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="PostedAt" Type="datetime" />
+          <Property Name="Source_Id" Type="int" Nullable="false" />
+          <Property Name="Rate_From" Type="float" />
+          <Property Name="Rate_To" Type="float" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Processor_Id" Type="int" Nullable="false" />
+          <Property Name="Company_Id" Type="int" />
+          <Property Name="CreatedBy_Id" Type="int" Nullable="false" />
+          <Property Name="Title_Id" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy_Id" Type="int" Nullable="false" />
+          <Property Name="OpenedAt" Type="datetime" Nullable="false" />
+          <Property Name="OpenedTill" Type="datetime" Nullable="false" />
+          <Property Name="Rate_Currency" Type="nvarchar(max)" />
+          <Property Name="Rate_Type" Type="int" Nullable="false" />
+          <Property Name="Rate_Description" Type="nvarchar(max)" />
+          <Property Name="ManagementLevel" Type="int" />
+          <Property Name="MinExperience" Type="int" />
+          <Property Name="MaxExperience" Type="int" />
+        </EntityType>
+        <EntityType Name="JobSources">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="JobTitles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Processors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
+        </EntityType>
+        <Association Name="FK_dbo_JobCategories_dbo_Jobs_JobId">
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="JobCategories" Type="Self.JobCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobCategories">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Jobs_dbo_JobSources_Source_Id">
+          <End Role="JobSources" Type="Self.JobSources" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSources">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Source_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Jobs_dbo_JobTitles_Title_Id">
+          <End Role="JobTitles" Type="Self.JobTitles" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTitles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Title_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Jobs_dbo_Processors_Processor_Id">
+          <End Role="Processors" Type="Self.Processors" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Processors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Processor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Processors_dbo_Processors_ParentId">
+          <End Role="Processors" Type="Self.Processors" Multiplicity="0..1" />
+          <End Role="Processors1" Type="Self.Processors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Processors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Processors1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bcjobs_analyticsModelStoreContainer">
+          <EntitySet Name="JobCategories" EntityType="Self.JobCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobSources" EntityType="Self.JobSources" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobTitles" EntityType="Self.JobTitles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Processors" EntityType="Self.Processors" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_JobCategories_dbo_Jobs_JobId" Association="Self.FK_dbo_JobCategories_dbo_Jobs_JobId">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="JobCategories" EntitySet="JobCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Jobs_dbo_JobSources_Source_Id" Association="Self.FK_dbo_Jobs_dbo_JobSources_Source_Id">
+            <End Role="JobSources" EntitySet="JobSources" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Jobs_dbo_JobTitles_Title_Id" Association="Self.FK_dbo_Jobs_dbo_JobTitles_Title_Id">
+            <End Role="JobTitles" EntitySet="JobTitles" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Jobs_dbo_Processors_Processor_Id" Association="Self.FK_dbo_Jobs_dbo_Processors_Processor_Id">
+            <End Role="Processors" EntitySet="Processors" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Processors_dbo_Processors_ParentId" Association="Self.FK_dbo_Processors_dbo_Processors_ParentId">
+            <End Role="Processors" EntitySet="Processors" />
+            <End Role="Processors1" EntitySet="Processors" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bcjobs_analyticsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Job">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostedAt" Type="DateTime" Precision="3" />
+          <Property Name="Source_Id" Type="Int32" Nullable="false" />
+          <Property Name="Rate_From" Type="Double" />
+          <Property Name="Rate_To" Type="Double" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Processor_Id" Type="Int32" Nullable="false" />
+          <Property Name="Company_Id" Type="Int32" />
+          <Property Name="CreatedBy_Id" Type="Int32" Nullable="false" />
+          <Property Name="Title_Id" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy_Id" Type="Int32" Nullable="false" />
+          <Property Name="OpenedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OpenedTill" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Rate_Currency" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Rate_Type" Type="Int32" Nullable="false" />
+          <Property Name="Rate_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ManagementLevel" Type="Int32" />
+          <Property Name="MinExperience" Type="Int32" />
+          <Property Name="MaxExperience" Type="Int32" />
+          <NavigationProperty Name="JobSource" Relationship="Self.FK_dbo_Jobs_dbo_JobSources_Source_Id" FromRole="Jobs" ToRole="JobSources" />
+          <NavigationProperty Name="JobTitle" Relationship="Self.FK_dbo_Jobs_dbo_JobTitles_Title_Id" FromRole="Jobs" ToRole="JobTitles" />
+          <NavigationProperty Name="Processor" Relationship="Self.FK_dbo_Jobs_dbo_Processors_Processor_Id" FromRole="Jobs" ToRole="Processors" />
+          <NavigationProperty Name="JobCategories" Relationship="bcjobs_analyticsModel.FK_dbo_JobCategories_dbo_Jobs_JobId" FromRole="Job" ToRole="JobCategory" />
+        </EntityType>
+        <EntityType Name="JobSource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Jobs" Relationship="Self.FK_dbo_Jobs_dbo_JobSources_Source_Id" FromRole="JobSources" ToRole="Jobs" />
+        </EntityType>
+        <EntityType Name="JobTitle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Jobs" Relationship="Self.FK_dbo_Jobs_dbo_JobTitles_Title_Id" FromRole="JobTitles" ToRole="Jobs" />
+        </EntityType>
+        <EntityType Name="Processor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentId" Type="Int32" />
+          <NavigationProperty Name="Jobs" Relationship="Self.FK_dbo_Jobs_dbo_Processors_Processor_Id" FromRole="Processors" ToRole="Jobs" />
+          <NavigationProperty Name="Processors1" Relationship="Self.FK_dbo_Processors_dbo_Processors_ParentId" FromRole="Processors" ToRole="Processors1" />
+          <NavigationProperty Name="Processor1" Relationship="Self.FK_dbo_Processors_dbo_Processors_ParentId" FromRole="Processors1" ToRole="Processors" />
+        </EntityType>
+        <Association Name="FK_dbo_Jobs_dbo_JobSources_Source_Id">
+          <End Role="JobSources" Type="Self.JobSource" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSources">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Source_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Jobs_dbo_JobTitles_Title_Id">
+          <End Role="JobTitles" Type="Self.JobTitle" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTitles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Title_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Jobs_dbo_Processors_Processor_Id">
+          <End Role="Processors" Type="Self.Processor" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Processors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Processor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Processors_dbo_Processors_ParentId">
+          <End Role="Processors" Type="Self.Processor" Multiplicity="0..1" />
+          <End Role="Processors1" Type="Self.Processor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Processors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Processors1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bcjobs_analyticsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Jobs" EntityType="Self.Job" />
+          <EntitySet Name="JobSources" EntityType="Self.JobSource" />
+          <EntitySet Name="JobTitles" EntityType="Self.JobTitle" />
+          <EntitySet Name="Processors" EntityType="Self.Processor" />
+          <AssociationSet Name="FK_dbo_Jobs_dbo_JobSources_Source_Id" Association="Self.FK_dbo_Jobs_dbo_JobSources_Source_Id">
+            <End Role="JobSources" EntitySet="JobSources" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Jobs_dbo_JobTitles_Title_Id" Association="Self.FK_dbo_Jobs_dbo_JobTitles_Title_Id">
+            <End Role="JobTitles" EntitySet="JobTitles" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Jobs_dbo_Processors_Processor_Id" Association="Self.FK_dbo_Jobs_dbo_Processors_Processor_Id">
+            <End Role="Processors" EntitySet="Processors" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Processors_dbo_Processors_ParentId" Association="Self.FK_dbo_Processors_dbo_Processors_ParentId">
+            <End Role="Processors" EntitySet="Processors" />
+            <End Role="Processors1" EntitySet="Processors" />
+          </AssociationSet>
+          <EntitySet Name="JobCategories" EntityType="bcjobs_analyticsModel.JobCategory" />
+          <AssociationSet Name="FK_dbo_JobCategories_dbo_Jobs_JobId" Association="bcjobs_analyticsModel.FK_dbo_JobCategories_dbo_Jobs_JobId">
+            <End Role="Job" EntitySet="Jobs" />
+            <End Role="JobCategory" EntitySet="JobCategories" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="JobCategory">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="SubCategoryId" />
+          </Key>
+          <Property Name="JobId" Type="Int32" Nullable="false" />
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Job" Relationship="bcjobs_analyticsModel.FK_dbo_JobCategories_dbo_Jobs_JobId" FromRole="JobCategory" ToRole="Job" />
+        </EntityType>
+        <Association Name="FK_dbo_JobCategories_dbo_Jobs_JobId">
+          <End Type="bcjobs_analyticsModel.Job" Role="Job" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="bcjobs_analyticsModel.JobCategory" Role="JobCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobCategory">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bcjobs_analyticsModelStoreContainer" CdmEntityContainer="bcjobs_analyticsEntities">
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="bcjobs_analyticsModel.Job">
+              <MappingFragment StoreEntitySet="Jobs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ReferenceId" ColumnName="ReferenceId" />
+                <ScalarProperty Name="PostedAt" ColumnName="PostedAt" />
+                <ScalarProperty Name="Source_Id" ColumnName="Source_Id" />
+                <ScalarProperty Name="Rate_From" ColumnName="Rate_From" />
+                <ScalarProperty Name="Rate_To" ColumnName="Rate_To" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="Processor_Id" ColumnName="Processor_Id" />
+                <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
+                <ScalarProperty Name="CreatedBy_Id" ColumnName="CreatedBy_Id" />
+                <ScalarProperty Name="Title_Id" ColumnName="Title_Id" />
+                <ScalarProperty Name="UpdatedBy_Id" ColumnName="UpdatedBy_Id" />
+                <ScalarProperty Name="OpenedAt" ColumnName="OpenedAt" />
+                <ScalarProperty Name="OpenedTill" ColumnName="OpenedTill" />
+                <ScalarProperty Name="Rate_Currency" ColumnName="Rate_Currency" />
+                <ScalarProperty Name="Rate_Type" ColumnName="Rate_Type" />
+                <ScalarProperty Name="Rate_Description" ColumnName="Rate_Description" />
+                <ScalarProperty Name="ManagementLevel" ColumnName="ManagementLevel" />
+                <ScalarProperty Name="MinExperience" ColumnName="MinExperience" />
+                <ScalarProperty Name="MaxExperience" ColumnName="MaxExperience" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobSources">
+            <EntityTypeMapping TypeName="bcjobs_analyticsModel.JobSource">
+              <MappingFragment StoreEntitySet="JobSources">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTitles">
+            <EntityTypeMapping TypeName="bcjobs_analyticsModel.JobTitle">
+              <MappingFragment StoreEntitySet="JobTitles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Processors">
+            <EntityTypeMapping TypeName="bcjobs_analyticsModel.Processor">
+              <MappingFragment StoreEntitySet="Processors">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobCategories">
+            <EntityTypeMapping TypeName="bcjobs_analyticsModel.JobCategory">
+              <MappingFragment StoreEntitySet="JobCategories">
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
