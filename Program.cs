@@ -44,7 +44,7 @@ namespace JobcastInsightRequest
                     var client = new HttpClient();
                     var output = client
                         .PostAsync(
-                            "http://insight.jobcast.net/parsing/jobs/technology", 
+                            "http://insight.jobcast.net/parsing/jobs/analytics/filter", 
                             new StringContent(string.Join(Environment.NewLine, group.Select(g => g.Job.Title + " " + g.Job.Description)))
                         )
                         .Result
@@ -56,7 +56,7 @@ namespace JobcastInsightRequest
                     for (int i = 0; i < scores.Count; i++)
                     {
                         dynamic score = scores[i];
-                        jobs[group.ElementAt(i).Index].Technology = score.job_category[0].text == "technology";
+                        jobs[group.ElementAt(i).Index].Technology = score.technology[0].text == "true";
                     }
                 }
 
