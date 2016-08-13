@@ -29,8 +29,8 @@ namespace JobcastInsightRequest
                             {
                                 ReferenceId = j.ReferenceId,
                                 Source = j.JobSource.Name,
-                                Title = Regex.Replace(j.JobTitle.Text, @"\r\n?|\n", " "),
-                                Description = Regex.Replace(j.Description, @"\r\n?|\n", " "),
+                                Title = j.JobTitle.Text.StripLinebreaks(),
+                                Description = j.Description.StripLinebreaks(),
                                 Parsed = entities.Jobs.Any(i => i.Processor.Name == "BotcodeDedupe.Sovren" && i.ReferenceId == j.ReferenceId && i.Source_Id == j.Source_Id),
                                 Categorized = j.JobCategories.Any()
                             }).ToArray();
@@ -86,6 +86,11 @@ namespace JobcastInsightRequest
         public static string WrapQuotes(this string s)
         {
             return "\"" + s + "\"";
+        }
+
+        public static string StripLinebreaks(this string s)
+        {
+            return Regex.Replace(s, @"\r\n?|\n", " ");
         }
     }
 }
